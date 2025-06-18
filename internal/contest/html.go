@@ -39,20 +39,20 @@ func handleErrorToken(err error) error {
 	}
 }
 
-func getOrNewSampleInOuts(s []*SampleInOuts, n int) *SampleInOuts {
-	for _, ss := range s {
+func getOrNewSampleInOuts(s *[]*SampleInOuts, n int) *SampleInOuts {
+	for _, ss := range *s {
 		if ss.No == n {
 			return ss
 		}
 	}
 	r := new(SampleInOuts)
 	r.No = n
-	s = append(s, r)
+	*s = append(*s, r)
 	return r
 }
 
 func (p *htmlParser) ParseSample() ([]*SampleInOuts, error) {
-	s := make([]*SampleInOuts, 10, 10)
+	s := []*SampleInOuts{}
 
 	z := html.NewTokenizer(p.reader)
 
@@ -87,12 +87,16 @@ func (p *htmlParser) ParseSample() ([]*SampleInOuts, error) {
 				}
 
 				c := string(z.Text())
-				sp := strings.Split(c, "\r\n")
 
-				ss := getOrNewSampleInOuts(s, n)
+				ss := getOrNewSampleInOuts(&s, n)
 
+				sp := strings.Split(c, "\n")
+
+				l := len(sp)
 				for i, in := range sp {
-					ss.Inputs[i] = in
+					if in != "" || i != l-1 {
+						ss.Inputs = append(ss.Inputs, in)
+					}
 				}
 
 			} else if reO.MatchString(c) {
@@ -113,12 +117,15 @@ func (p *htmlParser) ParseSample() ([]*SampleInOuts, error) {
 
 				c := string(z.Text())
 
-				sp := strings.Split(c, "\r\n")
+				ss := getOrNewSampleInOuts(&s, n)
 
-				ss := getOrNewSampleInOuts(s, n)
+				sp := strings.Split(c, "\n")
 
+				l := len(sp)
 				for i, in := range sp {
-					ss.Outputs[i] = in
+					if in != "" || i != l-1 {
+						ss.Outputs = append(ss.Outputs, in)
+					}
 				}
 			}
 		}

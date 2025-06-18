@@ -92,9 +92,15 @@ func (r *abstractRunner) Run(i []string, o []string) error {
 	fmt.Printf("[acrun]   test...\n")
 
 	ok := true
-	for j, got := range result.outs {
-		if got != o[j] {
-			ok = false
+	if len(result.outs) != len(o) {
+		ok = false
+	}
+
+	if ok {
+		for j, got := range result.outs {
+			if got != o[j] {
+				ok = false
+			}
 		}
 	}
 
