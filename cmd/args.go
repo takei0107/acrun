@@ -5,6 +5,14 @@ import (
 	"fmt"
 )
 
+type InvalidArgsError struct {
+	argCount int
+}
+
+func (err *InvalidArgsError) Error() string {
+	return fmt.Sprintf("2 arguments is required. but got=%d\n", err.argCount)
+}
+
 type options struct {
 	contest      string
 	questionTask string
@@ -35,8 +43,8 @@ func (a *parsedArgs) ToCmdRunParam() *cmdRunParam {
 }
 
 func parseOptions() *options {
-	c := flag.String("c", "", "contest")
-	t := flag.String("t", "", "contest question task")
+	c := flag.String("c", "", "contest name (default: current dir name)")
+	t := flag.String("t", "", "contest question task (default: value of question) ")
 	f := flag.String("f", "", "file name")
 	e := flag.String("e", "", "exec comand name")
 
@@ -55,7 +63,9 @@ func parseOptions() *options {
 func parseArgs() (*arguments, error) {
 	args := flag.Args()
 	if len(args) < 2 {
-		return nil, fmt.Errorf("2 arguments is required. but got=%d\n", len(args))
+		err := new(InvalidArgsError)
+		err.argCount = len(args)
+		return nil, err
 	}
 
 	ap := new(arguments)
@@ -78,4 +88,9 @@ func ParseCmdArgs() (*parsedArgs, error) {
 	p.args = args
 
 	return p, nil
+}
+
+func PrintUsage() {
+	fmt.Printf("%s\n", "usage: acrun [...options] lang question")
+	flag.PrintDefaults()
 }
