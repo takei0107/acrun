@@ -32,11 +32,9 @@ func (cc *compileCmd) runCompile() (*cmdResult, error) {
 
 	result := new(cmdResult)
 	result.exitCode = 0
-	result.outs = make([]string, 0, 256)
-	result.errors = make([]string, 0, 256)
 
-	go util.ReadToOuts(stdout, result.outs)
-	go util.ReadToOuts(stderr, result.errors)
+	go util.ReadToOuts(stdout, &result.outs)
+	go util.ReadToOuts(stderr, &result.errors)
 
 	err = cmd.Wait()
 	if err != nil {

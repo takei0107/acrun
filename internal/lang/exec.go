@@ -45,8 +45,8 @@ func (ec *exeCmd) runExec(i []string) (*cmdResult, error) {
 		}
 	}()
 
-	go util.ReadToOuts(stdout, result.outs)
-	go util.ReadToOuts(stderr, result.errors)
+	go util.ReadToOuts(stdout, &result.outs)
+	go util.ReadToOuts(stderr, &result.errors)
 
 	err = cmd.Wait()
 	if err != nil {

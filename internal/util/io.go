@@ -1,8 +1,8 @@
 package util
 
 import (
-	"fmt"
 	"bufio"
+	//"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -24,12 +24,11 @@ func Get(u *url.URL, fn func(*http.Response) error) (io.ReadCloser, error) {
 	return r.Body, nil
 }
 
-func ReadToOuts(r io.Reader, outs []string) {
+func ReadToOuts(r io.Reader, outs *[]string) {
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		t := scanner.Text()
-		fmt.Printf("[acrun] debug: %s\n", t)
-		outs = append(outs, t)
-		//outs = append(outs, scanner.Text())
+		//fmt.Printf("[acrun] debug: %s\n", t)
+		*outs = append(*outs, t)
 	}
 }

@@ -130,7 +130,7 @@ type mergedParam struct {
 func (mp *mergedParam) replaceParams() {
 	rp := map[string]string{
 		"%fileName%": mp.fileName,
-		"%exe%":     mp.exe,
+		"%exe%":      mp.exe,
 	}
 	mp.compileParam.replacePatterns(rp)
 	mp.runParam.replacePatterns(rp)
