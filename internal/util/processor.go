@@ -25,9 +25,9 @@ func (r *Replacer) ReplaceStr(s string) string {
 
 func (r *Replacer) ReplaceStrSlice(ss []string) []string {
 	n := make([]string, len(ss), len(ss))
-	for _, s := range ss {
+	for i, s := range ss {
 		s = r.ReplaceStr(s)
-		n = append(n, s)
+		n[i] = s
 	}
 	return n
 }
