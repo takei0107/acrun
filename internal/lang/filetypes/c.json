@@ -1,0 +1,13 @@
+{
+  "isNeedCompile": true,
+  "defaultFileName": "a.c",
+  "defaultExe": "a.out",
+  "compile": {
+    "cmd": "gcc-12",
+    "args": [ "-std=gnu2x", "-O2", "%fileName%", "-o", "%exe%", "-lm" ]
+  },
+  "run": {
+    "cmd": "./%exe%",
+    "args": []
+  }
+}
