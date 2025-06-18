@@ -197,11 +197,12 @@ func run(runner lang.Runner, s []*contest.SampleInOuts, qc *contest.QuestionConf
 
 	fmt.Printf("[acrun]   contest=%s, task=%s, id=%s\n", qc.Contest, qc.QuestionTask, qc.QuestionId)
 	for _, ss := range s {
-		fmt.Printf("[acrun]   sample-no=%d\n", ss.No)
+		fmt.Printf("[acrun]   [sample-no=%d]\n", ss.No)
 		err := runner.Run(ss.Inputs, ss.Outputs)
 		if err != nil {
 			return err
 		}
+		fmt.Println()
 	}
 
 	fmt.Printf("[acrun] end run\n")

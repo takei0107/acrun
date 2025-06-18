@@ -72,7 +72,7 @@ func (r *abstractRunner) Compile() error {
 }
 
 func (r *abstractRunner) Run(i []string, o []string) error {
-	fmt.Printf("[acrun]   run command=\"%s\"\n", r.exeCmd.cmd)
+	fmt.Printf("[acrun]     run command=\"%s\"\n", r.exeCmd.cmd)
 
 	result, err := r.exeCmd.runExec(i)
 	if err != nil {
@@ -80,16 +80,16 @@ func (r *abstractRunner) Run(i []string, o []string) error {
 	}
 
 	if result.exitCode > 0 {
-		fmt.Fprintf(os.Stderr, "[acrun]   command failed with code=%d\n", result.exitCode)
-		fmt.Fprintf(os.Stderr, "[acrun]   errors:\n")
+		fmt.Fprintf(os.Stderr, "[acrun]     command failed with code=%d\n", result.exitCode)
+		fmt.Fprintf(os.Stderr, "[acrun]     errors:\n")
 		for _, line := range result.errors {
-			fmt.Fprintf(os.Stderr, "[acrun]     %s\n", line)
+			fmt.Fprintf(os.Stderr, "[acrun]       %s\n", line)
 		}
 		return fmt.Errorf("comand failed")
 	}
 
-	fmt.Printf("[acrun]   run command succeess\n")
-	fmt.Printf("[acrun]   test...\n")
+	fmt.Printf("[acrun]     run command succeess\n")
+	fmt.Printf("[acrun]     test...\n")
 
 	ok := true
 	if len(result.outs) != len(o) {
@@ -105,17 +105,17 @@ func (r *abstractRunner) Run(i []string, o []string) error {
 	}
 
 	if !ok {
-		fmt.Printf("[acrun]   failed! please check outputs.\n")
+		fmt.Printf("[acrun]     \x1b[31mfailed!\x1b[0m please check outputs.\n")
 	} else {
-		fmt.Printf("[acrun]   success!\n")
+		fmt.Printf("[acrun]     \x1b[32msuccess!\x1b[0m\n")
 	}
 
-	fmt.Printf("[acrun]   sample outputs:\n")
+	fmt.Printf("[acrun]     sample outputs:\n")
 	for _, oo := range o {
 		fmt.Printf("%s\n", oo)
 	}
 
-	fmt.Printf("[acrun]   cmd outputs:\n")
+	fmt.Printf("[acrun]     cmd outputs:\n")
 	for _, oo := range result.outs {
 		fmt.Printf("%s\n", oo)
 	}

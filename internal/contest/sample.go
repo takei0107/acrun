@@ -56,8 +56,14 @@ func httpClosure(u *url.URL) func(*http.Response) error {
 }
 
 func getReader(u *url.URL) (io.ReadCloser, error) {
-	fmt.Printf("[acrun] fetch HTML from %s\n", u.String())
-	return util.Get(u, httpClosure(u))
+	fmt.Printf("[acrun] fetch file from %s\n", u.String())
+	r, err := util.Get(u, httpClosure(u))
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("[acrun] ok\n")
+
+	return r, nil
 }
 
 func GetSampleInOutsSlice(c *QuestionConfig) ([]*SampleInOuts, error) {
