@@ -12,7 +12,7 @@ func main() {
 	if err != nil {
 		if err, ok := err.(*acruncmd.InvalidArgsError); ok {
 			fmt.Fprintf(os.Stderr, "%s\n", err)
-			acruncmd.PrintUsage()
+			acruncmd.Usage()
 			os.Exit(1)
 		}
 

@@ -43,6 +43,8 @@ func (a *parsedArgs) ToCmdRunParam() *cmdRunParam {
 }
 
 func parseOptions() *options {
+	flag.Usage = Usage
+
 	c := flag.String("c", "", "contest name (default: current dir name)")
 	t := flag.String("t", "", "contest question task (default: value of question) ")
 	f := flag.String("f", "", "file name")
@@ -90,7 +92,7 @@ func ParseCmdArgs() (*parsedArgs, error) {
 	return p, nil
 }
 
-func PrintUsage() {
+func Usage() {
 	fmt.Printf("%s\n", "usage: acrun [...options] lang question")
 	flag.PrintDefaults()
 }
