@@ -88,15 +88,12 @@ type compileParam struct {
 	args []string
 }
 
-func (c *compileParam) replacePatterns(p replacePatternMap) {
-	r := util.NewReplacer()
+func (cp *compileParam) strs() []*string {
+	return []*string{&cp.cmd}
+}
 
-	for pp, v := range p {
-		r.AddReplacements(pp, v)
-	}
-
-	c.cmd = r.ReplaceStr(c.cmd)
-	c.args = r.ReplaceStrSlice(c.args)
+func (cp *compileParam) strSlices() [](*[]string) {
+	return [](*[]string){&cp.args}
 }
 
 type runParam struct {
@@ -104,15 +101,33 @@ type runParam struct {
 	args []string
 }
 
-func (rp *runParam) replacePatterns(p replacePatternMap) {
-	r := util.NewReplacer()
+func (rp *runParam) strs() []*string {
+	return []*string{&rp.cmd}
+}
 
-	for pp, v := range p {
-		r.AddReplacements(pp, v)
+func (rp *runParam) strSlices() [](*[]string) {
+	return [](*[]string){&rp.args}
+}
+
+type replacable interface {
+	strs() []*string
+	strSlices() [](*[]string)
+}
+
+func replacePatterns(r replacable, pm replacePatternMap) {
+	rp := util.NewReplacer()
+
+	for p, v := range pm {
+		rp.AddReplacements(p, v)
 	}
 
-	rp.cmd = r.ReplaceStr(rp.cmd)
-	rp.args = r.ReplaceStrSlice(rp.args)
+	for _, sp := range r.strs() {
+		*sp = rp.ReplaceStr(*sp)
+	}
+
+	for _, ssp := range r.strSlices() {
+		*ssp = rp.ReplaceStrSlice(*ssp)
+	}
 }
 
 type mergedParam struct {
@@ -128,12 +143,12 @@ type mergedParam struct {
 }
 
 func (mp *mergedParam) replaceParams() {
-	rp := map[string]string{
+	rp := replacePatternMap{
 		"%fileName%": mp.fileName,
 		"%exe%":      mp.exe,
 	}
-	mp.compileParam.replacePatterns(rp)
-	mp.runParam.replacePatterns(rp)
+	replacePatterns(mp.compileParam, rp)
+	replacePatterns(mp.runParam, rp)
 }
 
 func (mp *mergedParam) toRunnerConfig() *lang.RunnerConfig {
