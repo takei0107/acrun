@@ -7,7 +7,7 @@
     "args": [ "-std=gnu2x", "-O2", "%fileName%", "-o", "%exe%", "-lm" ]
   },
   "run": {
-    "cmd": "./%exe%",
+    "cmd": "%exe%",
     "args": []
   }
 }
