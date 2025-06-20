@@ -1,6 +1,7 @@
 package lang
 
 import (
+	"fmt"
 	"io"
 	"os/exec"
 
@@ -41,7 +42,7 @@ func (ec *exeCmd) runExec(i []string) (*cmdResult, error) {
 	go func() {
 		defer stdin.Close()
 		for _, ii := range i {
-			io.WriteString(stdin, ii)
+			io.WriteString(stdin, fmt.Sprintf("%s\n", ii))
 		}
 	}()
 
