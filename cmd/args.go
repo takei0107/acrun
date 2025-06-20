@@ -35,6 +35,7 @@ func (a *parsedArgs) ToCmdRunParam() *cmdRunParam {
 
 	p.contest = a.opts.contest
 	p.questionId = a.args.questionId
+	p.questionTask = a.opts.questionTask
 	p.lang = a.args.lang
 	p.fileName = a.opts.fileName
 	p.exe = a.opts.exe
